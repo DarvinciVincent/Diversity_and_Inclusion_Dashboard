@@ -3,13 +3,12 @@
 
 ## Table of Contents:
 
-- [Problem Statement](https://github.com/yogeshkasar778/PWC_task3-Diversity_and_Inclusion_dashboard/edit/main/README.md#problem-statement-)
-- [Datasource](https://github.com/yogeshkasar778/PWC_task3-Diversity_and_Inclusion_dashboard/edit/main/README.md#datasource-)
-- [Data Preparation](https://github.com/yogeshkasar778/PWC_task3-Diversity_and_Inclusion_dashboard/edit/main/README.md#data-preparation)
-- [Data Modeling](https://github.com/yogeshkasar778/PWC_task3-Diversity_and_Inclusion_dashboard/edit/main/README.md#data-modeling)
-- [Data Analysis (DAX)](https://github.com/yogeshkasar778/PWC_task3-Diversity_and_Inclusion_dashboard/edit/main/README.md#data-analysis-dax)
-- [Data Visualization (Dashboard)](https://github.com/yogeshkasar778/PWC_task3-Diversity_and_Inclusion_dashboard/edit/main/README.md#data-visualization)
-- [Insights](https://github.com/yogeshkasar778/PWC_task3-Diversity_and_Inclusion_dashboard/edit/main/README.md#insights)
+- [Problem Statement](https://github.com/DarvinciVincent/Diversity_and_Inclusion_Dashboard/blob/main/README.md#problem-statement-)
+- [Datasource](https://github.com/DarvinciVincent/Diversity_and_Inclusion_Dashboard/blob/main/README.md#datasource-)
+- [Data Preparation](https://github.com/DarvinciVincent/Diversity_and_Inclusion_Dashboard/blob/main/README.md#data-preparation)
+- [Data Modeling](https://github.com/DarvinciVincent/Diversity_and_Inclusion_Dashboard/blob/main/README.md#data-modeling)
+- [Data Analysis (DAX)](https://github.com/DarvinciVincent/Diversity_and_Inclusion_Dashboard/blob/main/README.md#data-analysis-dax)
+- [Insights](https://github.com/DarvinciVincent/Diversity_and_Inclusion_Dashboard/blob/main/README.md#insights)
 
 ## Problem Statement :
 
@@ -35,7 +34,7 @@ Calculating the following measures could help to define proper KPIs:
 
 Dataset used for this task was presented by [Pwc](https://www.pwc.ch/en/careers-with-pwc/students/virtual-case-experience.html) and Diversity and Inclusion dataset:
 
-Dataset: [Diversity and Inclusion](https://github.com/yogeshkasar778/PWC_task3-Diversity_and_Inclusion_dashboard/blob/main/03%20Diversity-Inclusion-Dataset.xlsx)
+Dataset: [Diversity and Inclusion](https://github.com/DarvinciVincent/Diversity_and_Inclusion_Dashboard/blob/main/03%20Diversity-Inclusion-Dataset.xlsx)
 
 ## Data Preparation:
 
@@ -47,9 +46,6 @@ Diversity and Inclusion dataset is give table named:
 
 Data Cleaning for the dataset was done in the power query editor as follows:
 - Changed the header row of dataset
-- Replaced  the value is `New hire FY20?` N coverted No and Y converted Yes
-- Replaced  the value is `In base group for turnover FY20` N coverted No and Y converted Yes
-- Replaced  the value is `Promotion in FY20?` N coverted No and Y converted Yes
 - Removed Unnecessary columns 
 - Removed Unnecessary rows
 - Each of the columns in the table were validated to have the correct data type
@@ -65,41 +61,38 @@ And then dataset was cleaned and transformed, it was ready to the data modeled.
 
 Measures used in  all visualization are:
 
-- #of leavers = `CALCULATE(COUNTA('HR Manager'[Employee ID]), 'HR Manager'[Leaver FY] IN { "FY20" })`
+- #of leavers = 'CALCULATE(COUNT('HR manager'[FY20 leaver?]), 'HR manager'[FY20 leaver?] = "Yes")'
 
-- #of men =`Calculate(distinctcount('HR Manager'[Employee ID]),Filter('HR Manager','HR Manager'[Gender]="Male"))`
+- #of men = 'CALCULATE(COUNT('HR manager'[Gender]), 'HR manager'[Gender] = "Male")'
 
-- #of women = `Calculate(distinctcount('HR Manager'[Employee ID]),Filter('HR Manager','HR Manager'[Gender]="Female"))`
+- #of women = 'CALCULATE(COUNT('HR manager'[Gender]), 'HR manager'[Gender] = "Female")'
 
-- % employees promoted (FY21) =`Divide(Calculate(distinctcount('HR Manager'[Employee ID]),Filter('HR Manager','HR Manager'[Promotion in FY21?]="Yes")),Calculate(distinctcount('HR Manager'[Employee ID]),Filter('HR Manager','HR Manager'[In base group for Promotion FY21]="Yes")))`
+- % employees promoted (FY21) = <br>
+'Divide(<br>
+    Calculate(distinctcount('HR Manager'[Employee ID]),Filter('HR Manager','HR Manager'[Promotion in FY21?]="Yes")),<br>
+    Calculate(distinctcount('HR Manager'[Employee ID]),Filter('HR Manager','HR Manager'[In base group for Promotion FY21]="Yes")),<br>
+    0)'
 
-- % of hires men = `Divide('HR Manager'[# of men],('HR Manager'[# of men]+'HR Manager'[# of women]))`
+- % of Hires Men = 'DIVIDE('HR manager'[# of men],('HR manager'[# of men]+'HR manager'[# of women]))'
 
-- % of hires women = `Divide('HR Manager'[# of women],('HR Manager'[# of women]+'HR Manager'[# of men]))`
+- % of Hires Women = 'DIVIDE('HR manager'[# of women],('HR manager'[# of men]+'HR manager'[# of women]))'
 
-- % Promotees who were men = `Divide(Calculate(distinctcount('HR Manager'[Employee ID]),Filter('HR Manager','HR Manager'[Gender]="Male")),distinctcount('HR Manager'[Employee ID]))`
+- % of man promoted = <br>
+'DIVIDE(<br>
+    CALCULATE(DISTINCTCOUNT('HR Manager'[Employee ID]),FILTER('HR Manager','HR Manager'[Gender]="Male")),<br>
+    DISTINCTCOUNT('HR Manager'[Employee ID]))'
 
-- % Promotees who were women = `Divide(Calculate(distinctcount('HR Manager'[Employee ID]),Filter('HR Manager','HR Manager'[Gender]="Female")),distinctcount('HR Manager'[Employee ID]))`
+- % of women promoted = <br>
+'DIVIDE(<br>
+    CALCULATE(DISTINCTCOUNT('HR Manager'[Employee ID]),FILTER('HR Manager','HR Manager'[Gender]="Female")),<br>
+    DISTINCTCOUNT('HR Manager'[Employee ID]))'
 
-- % Turnover = `Divide(Calculate(distinctcount('HR Manager'[Employee ID]),Filter('HR Manager','HR Manager'[FY20 leaver?]="Yes")),Divide(Calculate(distinctcount('HR Manager'[Employee ID]),Filter('HR Manager','HR Manager'[In base group for turnover FY20]="Y"))+Calculate(distinctcount('HR Manager'[Employee ID]),Filter('HR Manager',NOT('HR Manager'[Department @01.07.2020]=BLANK()))),2))`
+- % Turnover = 'DIVIDE(CALCULATE(DISTINCTCOUNT('HR Manager'[Employee ID]),FILTER('HR Manager','HR Manager'[FY20 leaver?]="Yes")),DIVIDE(CALCULATE(DISTINCTCOUNT('HR Manager'[Employee ID]),FILTER('HR Manager','HR Manager'[In base group for turnover FY20]="Yes"))+CALCULATE(DISTINCTCOUNT('HR Manager'[Employee ID]),FILTER('HR Manager',NOT ('HR Manager'[Department @01.07.2020]=BLANK()))),2))'
 
-- Avg Rating Men = `Calculate(Average('HR Manager'[FY20 Performance Rating]),Filter('HR Manager','HR Manager'[Gender]="Male"))`
+- Avg Rating Men = 'CALCULATE(AVERAGE('HR manager'[FY20 Performance Rating]), 'HR manager'[Gender] = "Male")'
 
-- Avg Rating Women = `Calculate(Average('HR Manager'[FY20 Performance Rating]),Filter('HR Manager','HR Manager'[Gender]="Female"))`
+- Avg Rating Women = 'CALCULATE(AVERAGE('HR manager'[FY20 Performance Rating]), 'HR manager'[Gender] = "Female")'
 
-## Data Visualization:
-
-Data visualization for the data analysis (DAX) was done in Microsoft Power BI Desktop:
-
-Shows visualizations from Diversity and Inclusion:
-
-| Diversity and inclusion HR Dashboard 1 |
-| ----------- |
-|![PWC Task 3 - Diversity and inclusion Dashboard_page-0002](https://user-images.githubusercontent.com/118357991/229836248-ed282004-53c1-4a9c-b73d-63cee21f982f.jpg)|
-
-| Diversity and inclusion HR Dashboard 2 |
-| ----------- |
-| ![PWC Task 3 - Diversity and inclusion Dashboard_page-0003](https://user-images.githubusercontent.com/118357991/229836856-5831ce14-9c2b-4570-a901-496f14744a5c.jpg)|
 
 ## Insights:
 
